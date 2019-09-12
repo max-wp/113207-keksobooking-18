@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Максим Тюльпаков](https://up.htmlacademy.ru/javascript/18/user/113207).
-* Наставник: `Неизвестно`.
+* Наставник: `Павел Ломов`.
 
 ---
 
