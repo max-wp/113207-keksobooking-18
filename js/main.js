@@ -70,25 +70,24 @@ var getSimilarAds = function () {
   }
   return similarAds;
 };
-var similarAd = getSimilarAds();
-console.log(similarAd);
+var similarAds = getSimilarAds();
+console.log(similarAds);
 
 // Задание 2
 var ads = document.querySelector('.map');
 ads.classList.remove('map--faded');
 
 // Задание 3
-// var mapPin = document.querySelector('map__pin');
 
-var getSimilarPin = function (ads, index) {
+var getSimilarPin = function (ads) {
 
   var button = document.createElement('button');
   var img = document.createElement('img');
 
-  for (var i = 0; i <= ads.length; i++) {
+  for (var i = 0; i < ads.length; i++) {
 
     button.classList.add('map__pin');
-    button.style.left = (ads[i]).location.x + 'px'; // Дебаггер здесь ругается, но если указать вместо i цифры от 1,2 и  т.д. то все нормально. Я хотел создать объявления на основе массива... Но в целом подзапутался... Недопонимаю.
+    button.style.left = (ads[i]).location.x + 'px';
     button.style.top = (ads[i]).location.y + 'px';
 
     img.src = (ads[i]).author.avatar;
@@ -97,8 +96,9 @@ var getSimilarPin = function (ads, index) {
     img.style.height = '40' + 'px';
 
     button.appendChild(img);
+
   }
-  return button;
+
 };
-var ad = getSimilarPin(similarAd);
-console.log(ad);
+var ads = getSimilarPin(similarAds);
+console.log(ads);
