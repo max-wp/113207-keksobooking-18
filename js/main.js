@@ -79,8 +79,6 @@ map.classList.remove('map--faded');
 
 // Задание 3 Создаем ДОМ-элементы
 
-
-
 var getSimilarPin = function (ads) {
 
   var button = document.createElement('button');
@@ -94,15 +92,20 @@ var getSimilarPin = function (ads) {
   img.alt = ads.offer.title;
   img.style.width = '40' + 'px';
   img.style.height = '40' + 'px';
+  img.draggable = false;
 
   button.appendChild(img);
+  return button;
 };
 // Задание 4
 var similarListElement = document.querySelector('.map__pins');
-var similarPinTemplate = document.querySelector('#pin');
+var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 console.log ('Шаблон: ' + similarPinTemplate);
+var fragment = document.createDocumentFragment();
 
-for (var i = 0; i < ADS_COUNT; i++) {
-  var pinElement = similarPinTemplate.cloneNode(true);
-  similarListElement.appendChild(pinElement);
+for (var i = 0; i <= ADS_COUNT; i++) {
+  var pinElement = getSimilarPin(similarAds[i]);
+  fragment.appendChild(pinElement);
+  console.log(pinElement);
 }
+similarListElement.appendChild(fragment);
