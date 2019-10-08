@@ -1,6 +1,6 @@
 'use strict';
-// Задание 1
 
+// Задание 1. Генерация моки
 var ADS_COUNT = 8;
 var NUM_AVATARS = [1, 2, 3, 4, 5, 6, 7, 8];
 var TITLES = ['Заголовок 01', 'Заголовок 02', 'Заголовок 03', 'Заголовок 04', 'Заголовок 05', 'Заголовок 06', 'Заголовок 07', 'Заголовок 08'];
@@ -73,32 +73,36 @@ var getSimilarAds = function () {
 var similarAds = getSimilarAds();
 console.log(similarAds);
 
-// Задание 2
-var ads = document.querySelector('.map');
-ads.classList.remove('map--faded');
+// Задание 2 Переключаем карту из неактивного состояния в активное
+var map = document.querySelector('.map');
+map.classList.remove('map--faded');
 
-// Задание 3
+// Задание 3 Создаем ДОМ-элементы
+
+
 
 var getSimilarPin = function (ads) {
 
   var button = document.createElement('button');
   var img = document.createElement('img');
 
-  for (var i = 0; i < ads.length; i++) {
+  button.classList.add('map__pin');
+  button.style.left = ads.location.x + 'px';
+  button.style.top = ads.location.y + 'px';
 
-    button.classList.add('map__pin');
-    button.style.left = (ads[i]).location.x + 'px';
-    button.style.top = (ads[i]).location.y + 'px';
+  img.src = ads.author.avatar;
+  img.alt = ads.offer.title;
+  img.style.width = '40' + 'px';
+  img.style.height = '40' + 'px';
 
-    img.src = (ads[i]).author.avatar;
-    img.alt = (ads[i]).offer.title;
-    img.style.width = '40' + 'px';
-    img.style.height = '40' + 'px';
-
-    button.appendChild(img);
-
-  }
-
+  button.appendChild(img);
 };
-var ads = getSimilarPin(similarAds);
-console.log(ads);
+// Задание 4
+var similarListElement = document.querySelector('.map__pins');
+var similarPinTemplate = document.querySelector('#pin');
+console.log ('Шаблон: ' + similarPinTemplate);
+
+for (var i = 0; i < ADS_COUNT; i++) {
+  var pinElement = similarPinTemplate.cloneNode(true);
+  similarListElement.appendChild(pinElement);
+}
