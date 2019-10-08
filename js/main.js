@@ -10,9 +10,7 @@ var CHECKOUT = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var DESCRIPTION = ['Описание 01', 'Описание 02', 'Описание 03', 'Описание 04', 'Описание 05', 'Описание 06', 'Описание 07', 'Описание 08'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-var LOCATION_X_ADDRESS = 600;
-var LOCATION_Y_ADDRESS = 350;
-var LOCATION_X_IN_FIELD = 200;
+var LOCATION_X_MAX_WIDTH_BLOCK_PIN = 1000;
 var LOCATION_Y_IN_FIELD = {min: 130, max: 630};
 var PRICE = {min: 10000, max: 50000};
 var ROOMS = {min: 1, max: 3};
@@ -29,7 +27,10 @@ var getRandomElementArray = function (array) {
   return array[randomIndex];
 };
 
-function getRandomNumberInMinMax(min, max) {
+function getRandomNumberInMinMaxOrMax(max, min) {
+  if (!min) {
+    min = 0;
+  }
   return Math.floor(Math.random() * (max - min) + min);
 }
 
@@ -37,25 +38,29 @@ var getNewSizeArray = function (array) {
   var rndLength = getRandomLengthArray(array);
   var newArray = [];
   for (var i = 0; i < rndLength; i++) {
-    newArray[i] = array[i];
+    var rndElement = getRandomNumberInMinMaxOrMax(rndLength);
+    newArray[i] = array[rndElement];
   }
   return newArray;
 };
 
 var getSimilarAds = function () {
+
   var similarAds = [];
   for (var i = 0; i < ADS_COUNT; i++) {
+    var locationX = getRandomNumberInMinMaxOrMax(LOCATION_X_MAX_WIDTH_BLOCK_PIN);
+    var locationY = getRandomNumberInMinMaxOrMax(LOCATION_Y_IN_FIELD.max, LOCATION_Y_IN_FIELD.min);
     similarAds[i] = {
       'author': {
         'avatar': 'img/avatars/user0' + NUM_AVATARS[i] + '.png'
       },
       'offer': {
         'title': TITLES[i],
-        'address': LOCATION_X_ADDRESS + ',' + LOCATION_Y_ADDRESS,
-        'price': getRandomNumberInMinMax(PRICE.min, PRICE.max),
+        'address': locationX + ',' + locationY,
+        'price': getRandomNumberInMinMaxOrMax(PRICE.max, PRICE.min),
         'type': getRandomElementArray(TYPES),
-        'rooms': getRandomNumberInMinMax(ROOMS.min, ROOMS.max),
-        'guests': getRandomNumberInMinMax(GUESTS.min, GUESTS.max),
+        'rooms': getRandomNumberInMinMaxOrMax(ROOMS.max, ROOMS.min),
+        'guests': getRandomNumberInMinMaxOrMax(GUESTS.max, GUESTS.min),
         'checkin': getRandomElementArray(CHECKIN),
         'checkout': getRandomElementArray(CHECKOUT),
         'features': getNewSizeArray(FEATURES),
@@ -63,8 +68,8 @@ var getSimilarAds = function () {
         'photos': getNewSizeArray(PHOTOS)
       },
       'location': {
-        'x': LOCATION_X_IN_FIELD,
-        'y': getRandomNumberInMinMax(LOCATION_Y_IN_FIELD.min, LOCATION_Y_IN_FIELD.max)
+        'x': locationX,
+        'y': locationY
       }
     };
   }
@@ -78,15 +83,14 @@ var map = document.querySelector('.map');
 map.classList.remove('map--faded');
 
 // Задание 3 Создаем ДОМ-элементы
-
 var getSimilarPin = function (ads) {
 
   var button = document.createElement('button');
   var img = document.createElement('img');
 
   button.classList.add('map__pin');
-  button.style.left = ads.location.x + 'px';
-  button.style.top = ads.location.y + 'px';
+  button.style.left = ads.location.x + 25 + 'px';
+  button.style.top = ads.location.y + 70 + 'px';
 
   img.src = ads.author.avatar;
   img.alt = ads.offer.title;
@@ -97,15 +101,19 @@ var getSimilarPin = function (ads) {
   button.appendChild(img);
   return button;
 };
-// Задание 4
+// Задание 4 Отрисовка элементов в блок
 var similarListElement = document.querySelector('.map__pins');
 var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-console.log ('Шаблон: ' + similarPinTemplate);
-var fragment = document.createDocumentFragment();
+console.log('Шаблон: ' + similarPinTemplate);
 
-for (var i = 0; i <= ADS_COUNT; i++) {
-  var pinElement = getSimilarPin(similarAds[i]);
-  fragment.appendChild(pinElement);
-  console.log(pinElement);
-}
-similarListElement.appendChild(fragment);
+var renderPins = function (pins) {
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < ADS_COUNT; i++) {
+    var pinElement = getSimilarPin(pins[i]);
+    fragment.appendChild(pinElement);
+    console.log(pinElement);
+  }
+  similarListElement.appendChild(fragment);
+};
+renderPins(similarAds);
