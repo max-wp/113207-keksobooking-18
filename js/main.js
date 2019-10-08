@@ -10,8 +10,10 @@ var CHECKOUT = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var DESCRIPTION = ['Описание 01', 'Описание 02', 'Описание 03', 'Описание 04', 'Описание 05', 'Описание 06', 'Описание 07', 'Описание 08'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-var LOCATION_X_MAX_WIDTH_BLOCK_PIN = 1000;
-var LOCATION_Y_IN_FIELD = {min: 130, max: 630};
+var AVATAR_X = 50 / 2;
+var AVATAR_Y = 70;
+var LOCATION_X_MAX_WIDTH_BLOCK_PIN = 1000 - AVATAR_X;
+var LOCATION_Y_IN_FIELD = {min: 130 - AVATAR_Y, max: 630 - AVATAR_Y};
 var PRICE = {min: 10000, max: 50000};
 var ROOMS = {min: 1, max: 3};
 var GUESTS = {min: 0, max: 5};
@@ -34,6 +36,15 @@ function getRandomNumberInMinMaxOrMax(max, min) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
+var delAndSort = function (arr) {
+  arr.sort();
+  for (var i = 1, j = 1, n = arr.length; i < n; i++) {
+    if (arr[i] !== arr[j - 1]) {arr[j++] = arr[i];
+    }
+  }
+  arr.length = j;
+};
+
 var getNewSizeArray = function (array) {
   var rndLength = getRandomLengthArray(array);
   var newArray = [];
@@ -41,8 +52,11 @@ var getNewSizeArray = function (array) {
     var rndElement = getRandomNumberInMinMaxOrMax(rndLength);
     newArray[i] = array[rndElement];
   }
+  delAndSort(newArray);
   return newArray;
 };
+
+
 
 var getSimilarAds = function () {
 
