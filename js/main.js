@@ -36,27 +36,25 @@ function getRandomNumberInMinMaxOrMax(max, min) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
-var delAndSort = function (arr) {
-  arr.sort();
-  for (var i = 1, j = 1, n = arr.length; i < n; i++) {
-    if (arr[i] !== arr[j - 1]) {arr[j++] = arr[i];
-    }
+function getShuffleArray(array) {
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = array[i];
+    array[i] = array[j];
+    array[j] = t;
   }
-  arr.length = j;
-};
+  return array;
+}
 
 var getNewSizeArray = function (array) {
   var rndLength = getRandomLengthArray(array);
+  var shuffleArray = getShuffleArray(array);
   var newArray = [];
   for (var i = 0; i < rndLength; i++) {
-    var rndElement = getRandomNumberInMinMaxOrMax(rndLength);
-    newArray[i] = array[rndElement];
+    newArray[i] = shuffleArray[i];
   }
-  delAndSort(newArray);
   return newArray;
 };
-
-
 
 var getSimilarAds = function () {
 
@@ -90,7 +88,6 @@ var getSimilarAds = function () {
   return similarAds;
 };
 var similarAds = getSimilarAds();
-console.log(similarAds);
 
 // Задание 2 Переключаем карту из неактивного состояния в активное
 var map = document.querySelector('.map');
@@ -117,8 +114,6 @@ var getSimilarPin = function (ads) {
 };
 // Задание 4 Отрисовка элементов в блок
 var similarListElement = document.querySelector('.map__pins');
-var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-console.log('Шаблон: ' + similarPinTemplate);
 
 var renderPins = function (pins) {
   var fragment = document.createDocumentFragment();
@@ -126,7 +121,6 @@ var renderPins = function (pins) {
   for (var i = 0; i < ADS_COUNT; i++) {
     var pinElement = getSimilarPin(pins[i]);
     fragment.appendChild(pinElement);
-    console.log(pinElement);
   }
   similarListElement.appendChild(fragment);
 };
