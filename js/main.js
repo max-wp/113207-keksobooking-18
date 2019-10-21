@@ -17,18 +17,21 @@ var LOCATION_Y_IN_FIELD = {min: 130 - AVATAR_Y, max: 630 - AVATAR_Y};
 var PRICE = {min: 10000, max: 50000};
 var ROOMS = {min: 1, max: 3};
 var GUESTS = {min: 0, max: 5};
+var ENTER_KEYCODE = 13;
 
-
+// Случайная длина массива
 var getRandomLengthArray = function (array) {
   var randomLength = Math.floor(Math.random() * array.length);
   return randomLength;
 };
 
+// Случайный индекс массива
 var getRandomElementArray = function (array) {
   var randomIndex = getRandomLengthArray(array);
   return array[randomIndex];
 };
 
+// Случайное целое число из указанного диапазона, либо до максимального
 function getRandomNumberInMinMaxOrMax(max, min) {
   if (!min) {
     min = 0;
@@ -36,6 +39,7 @@ function getRandomNumberInMinMaxOrMax(max, min) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
+// Перемешивание элементов массива
 function getShuffleArray(array) {
   for (var i = array.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
@@ -45,7 +49,7 @@ function getShuffleArray(array) {
   }
   return array;
 }
-
+// Получение массива со случайным набором
 var getNewSizeArray = function (array) {
   var rndLength = getRandomLengthArray(array);
   var shuffleArray = getShuffleArray(array);
@@ -56,6 +60,7 @@ var getNewSizeArray = function (array) {
   return newArray;
 };
 
+// Формирование моки
 var getSimilarAds = function () {
 
   var similarAds = [];
@@ -89,11 +94,13 @@ var getSimilarAds = function () {
 };
 var similarAds = getSimilarAds();
 
-// Задание 2 Переключаем карту из неактивного состояния в активное
+// Переключаем карту из неактивного состояния в активное
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+var hideMap = function () {
+  map.classList.remove('map--faded');
+};
 
-// Задание 3 Создаем ДОМ-элементы
+// Создаем ДОМ-элементы
 var getSimilarPin = function (ads) {
 
   var button = document.createElement('button');
@@ -112,7 +119,7 @@ var getSimilarPin = function (ads) {
   button.appendChild(img);
   return button;
 };
-// Задание 4 Отрисовка элементов в блок
+// Отрисовка элементов (меток) в блок
 var similarListElement = document.querySelector('.map__pins');
 
 var renderPins = function (pins) {
@@ -124,9 +131,42 @@ var renderPins = function (pins) {
   }
   similarListElement.appendChild(fragment);
 };
-renderPins(similarAds);
+// var pins = renderPins(similarAds);
 
-// Вопросы:
-// 1) ADS_COUNT нужен ли или избыточен?
-// 2) Так и не понял правильно ли мое решение с отступами аватарки. Правильно ли я понял задание?
-// 3) В целом вопрос правильно ли нагерерил все моки. Опять же верно ли понял задание?
+// Подготовительная часть
+var mapFilter = document.querySelector('.map__filters');
+var form = document.querySelector('.ad-form');
+var fieldsets = form.querySelectorAll('fieldset');
+
+// Неактивное состояние
+for (var i = 0; i < fieldsets.length; i++) {
+  fieldsets[i].disabled = true;
+}
+
+mapFilter.classList.add('ad-form--disabled');
+
+var pinMain = document.querySelector('.map__pin--main');
+var pinAddress = document.querySelector('#address');
+
+// Получение координат
+map.addEventListener('mousedown', function (evt) {
+  pinAddress.value = evt.pageX + ',' + evt.pageY;
+});
+
+function pinMainMouseDownHandler() {
+  map.classList.remove('map--faded');
+  form.classList.remove('ad-form--disabled');
+  mapFilter.classList.remove('ad-form--disabled');
+  hideMap(map);
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = false;
+  }
+
+}
+pinMain.addEventListener('mousedown', pinMainMouseDownHandler);
+pinMain.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    pinMainMouseDownHandler();
+  }
+}
+);
