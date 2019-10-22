@@ -192,15 +192,15 @@ checkStatePage(true);
 
 // Обработчик нажатия кнопки на главной метке
 
-function pinMainMouseDownHandler(evt) {
+function pinMainClickHandler(evt) {
   checkStatePage(false);
   evt.preventDefault();
 }
 
-pinMain.addEventListener('mousedown', pinMainMouseDownHandler);
+pinMain.addEventListener('mousedown', pinMainClickHandler);
 pinMain.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
-    pinMainMouseDownHandler();
+    pinMainClickHandler();
   }
   evt.preventDefault();
 }
