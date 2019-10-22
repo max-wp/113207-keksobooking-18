@@ -151,18 +151,19 @@ var renderPin = function (pin) {
   mapPin.appendChild(fragment);
 };
 
+// Неактивное состояние полей
+var defaultStatePage = function () {
 
+  var mapFilter = document.querySelector('.map__filters');
+  var form = document.querySelector('.ad-form');
+  var fieldsets = form.querySelectorAll('fieldset');
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = true;
+  }
+  mapFilter.classList.add('ad-form--disabled');
 
-// var mapFilter = document.querySelector('.map__filters');
-// var form = document.querySelector('.ad-form');
-// var fieldsets = form.querySelectorAll('fieldset');
-
-// // Неактивное состояние
-// for (var i = 0; i < fieldsets.length; i++) {
-//   fieldsets[i].disabled = true;
-// }
-
-// mapFilter.classList.add('ad-form--disabled');
+};
+defaultStatePage();
 
 // var pinMain = document.querySelector('.map__pin--main');
 // var pinAddress = document.querySelector('#address');
