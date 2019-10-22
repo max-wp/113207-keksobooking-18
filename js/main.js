@@ -109,7 +109,7 @@ var getDataAd = function () {
 var dataAds = getDataAd();
 
 // Переключаем карту из неактивного состояния в активное
-var hideMap = function () {
+var activateMap = function () {
   map.classList.remove('map--faded');
 };
 
@@ -151,46 +151,47 @@ var renderPin = function (pin) {
   mapPin.appendChild(fragment);
 };
 
-// Неактивное состояние полей
-var defaultStatePage = function () {
+// *****************************
+// Настройки отображения страницы
+// *****************************
 
-  var mapFilter = document.querySelector('.map__filters');
-  var form = document.querySelector('.ad-form');
-  var fieldsets = form.querySelectorAll('fieldset');
+// Определение состояния страницы (поумолчанию/ активная)
+var form = document.querySelector('.ad-form');
+var pinMain = document.querySelector('.map__pin--main');
+var mapFilter = document.querySelector('.map__filters');
+var fieldsets = form.querySelectorAll('fieldset');
+var pinAddress = document.querySelector('#address');
+
+var checkStatePage = function (statePage) {
+
   for (var i = 0; i < fieldsets.length; i++) {
-    fieldsets[i].disabled = true;
+    fieldsets[i].disabled = statePage;
   }
-  mapFilter.classList.add('ad-form--disabled');
 
+  if (statePage) {
+    mapFilter.classList.add('ad-form--disabled');
+
+  } else {
+    activateMap();
+    mapFilter.classList.remove('ad-form--disabled');
+    map.classList.remove('map--faded');
+    form.classList.remove('ad-form--disabled');
+  }
 };
-defaultStatePage();
+checkStatePage(true);
 
-// var pinMain = document.querySelector('.map__pin--main');
-// var pinAddress = document.querySelector('#address');
+// Функция нажатия кнопки на главной метке
 
-// // Получение координат
-// var topPin = pinMain.getAttribute('style');
-// console.log(topPin);
-// console.log(topPin.style.top);
-// console.log(styleAtt);
-// console.log(pinAddress + ' Значение value:' + pinAddress.value);
+function pinMainMouseDownHandler(evt) {
+  checkStatePage(false);
+  pinAddress.value = '153, 250';
+  evt.preventDefault();
+}
 
-
-// function pinMainMouseDownHandler() {
-//   map.classList.remove('map--faded');
-//   form.classList.remove('ad-form--disabled');
-//   mapFilter.classList.remove('ad-form--disabled');
-//   hideMap(map);
-//   for (var i = 0; i < fieldsets.length; i++) {
-//     fieldsets[i].disabled = false;
-//   }
-//   pinAddress.value = '153, 250';
-
-// }
-// pinMain.addEventListener('mousedown', pinMainMouseDownHandler);
-// pinMain.addEventListener('keydown', function (evt) {
-//   if (evt.keyCode === ENTER_KEYCODE) {
-//     pinMainMouseDownHandler();
-//   }
-// }
-// );
+pinMain.addEventListener('mousedown', pinMainMouseDownHandler);
+pinMain.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    pinMainMouseDownHandler();
+  }
+}
+);
