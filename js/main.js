@@ -168,20 +168,24 @@ var checkStatePage = function (statePage) {
   for (var i = 0; i < fieldsets.length; i++) {
     fieldsets[i].disabled = statePage;
   }
-
+  pinAddress.readOnly = true;
+  // Неактивное состояние страницы
   if (statePage) {
     mapFilter.classList.add('ad-form--disabled');
 
+    var coordinateX = Math.round(+pinMain.style.left.slice(0, -2) + pinMain.clientWidth / 2);
+    var coordinateY = Math.round(+pinMain.style.top.slice(0, -2) + pinMain.clientHeight / 2);
+    pinAddress.value = coordinateX + ', ' + coordinateY;
 
+    // Активное состояние страницы
   } else {
     activateMap();
     mapFilter.classList.remove('ad-form--disabled');
     map.classList.remove('map--faded');
     form.classList.remove('ad-form--disabled');
-    var сoordinateX = Math.round(+pinMain.style.left.slice(0, -2) + pinMain.clientWidth / 2);
+    var coordinateX = Math.round(+pinMain.style.left.slice(0, -2) + pinMain.clientWidth / 2);
     var coordinateY = Math.round(+pinMain.style.top.slice(0, -2) + pinMain.clientHeight + AVATAR_POINTER_HEIGHT);
-    pinAddress.value = сoordinateX + ', ' + coordinateY;
-    pinAddress.readOnly = true;
+    pinAddress.value = coordinateX + ', ' + coordinateY;
   }
 };
 checkStatePage(true);
