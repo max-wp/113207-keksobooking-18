@@ -11,6 +11,7 @@ var DESCRIPTION = ['Описание 01', 'Описание 02', 'Описани
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var AVATAR_WIDTH = 50;
 var AVATAR_HEIGHT = 70;
+var AVATAR_POINTER_HEIGHT = 16;
 var PRICE = {min: 10000, max: 50000};
 var ROOMS = {min: 1, max: 3};
 var GUESTS = {min: 0, max: 5};
@@ -155,13 +156,13 @@ var renderPin = function (pin) {
 // Настройки отображения страницы
 // *****************************
 
-// Определение состояния страницы (поумолчанию/ активная)
 var form = document.querySelector('.ad-form');
 var pinMain = document.querySelector('.map__pin--main');
 var mapFilter = document.querySelector('.map__filters');
 var fieldsets = form.querySelectorAll('fieldset');
 var pinAddress = document.querySelector('#address');
 
+// Определение состояния страницы (активная/неактивная)
 var checkStatePage = function (statePage) {
 
   for (var i = 0; i < fieldsets.length; i++) {
@@ -171,20 +172,24 @@ var checkStatePage = function (statePage) {
   if (statePage) {
     mapFilter.classList.add('ad-form--disabled');
 
+
   } else {
     activateMap();
     mapFilter.classList.remove('ad-form--disabled');
     map.classList.remove('map--faded');
     form.classList.remove('ad-form--disabled');
+    var сoordinateX = Math.round(+pinMain.style.left.slice(0, -2) + pinMain.clientWidth / 2);
+    var coordinateY = Math.round(+pinMain.style.top.slice(0, -2) + pinMain.clientHeight + AVATAR_POINTER_HEIGHT);
+    pinAddress.value = сoordinateX + ', ' + coordinateY;
+    pinAddress.readOnly = true;
   }
 };
 checkStatePage(true);
 
-// Функция нажатия кнопки на главной метке
+// Обработчик нажатия кнопки на главной метке
 
 function pinMainMouseDownHandler(evt) {
   checkStatePage(false);
-  pinAddress.value = '153, 250';
   evt.preventDefault();
 }
 
@@ -193,5 +198,6 @@ pinMain.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     pinMainMouseDownHandler();
   }
+  evt.preventDefault();
 }
 );
