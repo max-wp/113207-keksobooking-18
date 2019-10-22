@@ -107,13 +107,11 @@ var getDataAd = function () {
   return dataAds;
 };
 var dataAds = getDataAd();
-console.log(dataAds);
 
 // Переключаем карту из неактивного состояния в активное
 var hideMap = function () {
   map.classList.remove('map--faded');
 };
-hideMap();
 
 // *****************************
 // Отрисовка меток
@@ -153,7 +151,6 @@ var renderPin = function (pin) {
   mapPin.appendChild(fragment);
 };
 
-renderPin(dataAds);
 
 
 // var mapFilter = document.querySelector('.map__filters');
