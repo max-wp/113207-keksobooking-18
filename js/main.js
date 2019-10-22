@@ -1,6 +1,5 @@
 'use strict';
 
-// Задание 1. Генерация моки
 var ADS_COUNT = 8;
 var NUM_AVATARS = [1, 2, 3, 4, 5, 6, 7, 8];
 var TITLES = ['Заголовок 01', 'Заголовок 02', 'Заголовок 03', 'Заголовок 04', 'Заголовок 05', 'Заголовок 06', 'Заголовок 07', 'Заголовок 08'];
@@ -10,14 +9,16 @@ var CHECKOUT = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var DESCRIPTION = ['Описание 01', 'Описание 02', 'Описание 03', 'Описание 04', 'Описание 05', 'Описание 06', 'Описание 07', 'Описание 08'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-var AVATAR_X = 50 / 2;
-var AVATAR_Y = 70;
-var LOCATION_X_MAX_WIDTH_BLOCK_PIN = 1000 - AVATAR_X;
-var LOCATION_Y_IN_FIELD = {min: 130 - AVATAR_Y, max: 630 - AVATAR_Y};
+var AVATAR_WIDTH = 50;
+var AVATAR_HEIGHT = 70;
 var PRICE = {min: 10000, max: 50000};
 var ROOMS = {min: 1, max: 3};
 var GUESTS = {min: 0, max: 5};
 var ENTER_KEYCODE = 13;
+
+// *****************************
+// Функции для генерации данных
+// *****************************
 
 // Случайная длина массива
 var getRandomLengthArray = function (array) {
@@ -60,20 +61,33 @@ var getNewSizeArray = function (array) {
   return newArray;
 };
 
-// Формирование моки
-var getSimilarAds = function () {
+// *****************************
+// Структура данных
+// *****************************
 
-  var similarAds = [];
+// Функция получения массива данных моки;
+
+var map = document.querySelector('.map');
+var mapWidth = map.clientWidth;
+
+var locationX = mapWidth - AVATAR_WIDTH / 2;
+var locationYmin = 130 - AVATAR_HEIGHT;
+var locattionYmax = 630 - AVATAR_HEIGHT;
+var locationY = {min: locationYmin, max: locattionYmax};
+
+var getDataAd = function () {
+  var dataAds = [];
   for (var i = 0; i < ADS_COUNT; i++) {
-    var locationX = getRandomNumberInMinMaxOrMax(LOCATION_X_MAX_WIDTH_BLOCK_PIN);
-    var locationY = getRandomNumberInMinMaxOrMax(LOCATION_Y_IN_FIELD.max, LOCATION_Y_IN_FIELD.min);
-    similarAds[i] = {
+    var xLocation = getRandomNumberInMinMaxOrMax(locationX);
+    var yLocation = getRandomNumberInMinMaxOrMax(locationY.max, locationY.min);
+
+    dataAds[i] = {
       'author': {
         'avatar': 'img/avatars/user0' + NUM_AVATARS[i] + '.png'
       },
       'offer': {
         'title': TITLES[i],
-        'address': locationX + ',' + locationY,
+        'address': xLocation + ',' + yLocation,
         'price': getRandomNumberInMinMaxOrMax(PRICE.max, PRICE.min),
         'type': getRandomElementArray(TYPES),
         'rooms': getRandomNumberInMinMaxOrMax(ROOMS.max, ROOMS.min),
@@ -85,33 +99,38 @@ var getSimilarAds = function () {
         'photos': getNewSizeArray(PHOTOS)
       },
       'location': {
-        'x': locationX,
-        'y': locationY
+        'x': xLocation,
+        'y': yLocation
       }
     };
   }
-  return similarAds;
+  return dataAds;
 };
-var similarAds = getSimilarAds();
+var dataAds = getDataAd();
+console.log(dataAds);
 
 // Переключаем карту из неактивного состояния в активное
-var map = document.querySelector('.map');
 var hideMap = function () {
   map.classList.remove('map--faded');
 };
+hideMap();
 
-// Создаем ДОМ-элементы
-var getSimilarPin = function (ads) {
+// *****************************
+// Отрисовка меток
+// *****************************
+
+// Создаем ДОМ-элемент (разметку) метки
+var getPinElement = function (data) {
 
   var button = document.createElement('button');
   var img = document.createElement('img');
 
   button.classList.add('map__pin');
-  button.style.left = ads.location.x + 25 + 'px';
-  button.style.top = ads.location.y + 70 + 'px';
+  button.style.left = data.location.x + 25 + 'px';
+  button.style.top = data.location.y + 70 + 'px';
 
-  img.src = ads.author.avatar;
-  img.alt = ads.offer.title;
+  img.src = data.author.avatar;
+  img.alt = data.offer.title;
   img.style.width = '40' + 'px';
   img.style.height = '40' + 'px';
   img.draggable = false;
@@ -119,54 +138,61 @@ var getSimilarPin = function (ads) {
   button.appendChild(img);
   return button;
 };
-// Отрисовка элементов (меток) в блок
-var similarListElement = document.querySelector('.map__pins');
 
-var renderPins = function (pins) {
+// Отрисовка меток на карте (заполнение блока DOM элементами)
+
+var mapPin = document.querySelector('.map__pins');
+
+var renderPin = function (pin) {
+
   var fragment = document.createDocumentFragment();
-
   for (var i = 0; i < ADS_COUNT; i++) {
-    var pinElement = getSimilarPin(pins[i]);
+    var pinElement = getPinElement(pin[i]);
     fragment.appendChild(pinElement);
   }
-  similarListElement.appendChild(fragment);
+  mapPin.appendChild(fragment);
 };
-// var pins = renderPins(similarAds);
 
-// Подготовительная часть
-var mapFilter = document.querySelector('.map__filters');
-var form = document.querySelector('.ad-form');
-var fieldsets = form.querySelectorAll('fieldset');
+renderPin(dataAds);
 
-// Неактивное состояние
-for (var i = 0; i < fieldsets.length; i++) {
-  fieldsets[i].disabled = true;
-}
 
-mapFilter.classList.add('ad-form--disabled');
+// var mapFilter = document.querySelector('.map__filters');
+// var form = document.querySelector('.ad-form');
+// var fieldsets = form.querySelectorAll('fieldset');
 
-var pinMain = document.querySelector('.map__pin--main');
-var pinAddress = document.querySelector('#address');
+// // Неактивное состояние
+// for (var i = 0; i < fieldsets.length; i++) {
+//   fieldsets[i].disabled = true;
+// }
 
-// Получение координат
-map.addEventListener('mousedown', function (evt) {
-  pinAddress.value = evt.pageX + ',' + evt.pageY;
-});
+// mapFilter.classList.add('ad-form--disabled');
 
-function pinMainMouseDownHandler() {
-  map.classList.remove('map--faded');
-  form.classList.remove('ad-form--disabled');
-  mapFilter.classList.remove('ad-form--disabled');
-  hideMap(map);
-  for (var i = 0; i < fieldsets.length; i++) {
-    fieldsets[i].disabled = false;
-  }
+// var pinMain = document.querySelector('.map__pin--main');
+// var pinAddress = document.querySelector('#address');
 
-}
-pinMain.addEventListener('mousedown', pinMainMouseDownHandler);
-pinMain.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ENTER_KEYCODE) {
-    pinMainMouseDownHandler();
-  }
-}
-);
+// // Получение координат
+// var topPin = pinMain.getAttribute('style');
+// console.log(topPin);
+// console.log(topPin.style.top);
+// console.log(styleAtt);
+// console.log(pinAddress + ' Значение value:' + pinAddress.value);
+
+
+// function pinMainMouseDownHandler() {
+//   map.classList.remove('map--faded');
+//   form.classList.remove('ad-form--disabled');
+//   mapFilter.classList.remove('ad-form--disabled');
+//   hideMap(map);
+//   for (var i = 0; i < fieldsets.length; i++) {
+//     fieldsets[i].disabled = false;
+//   }
+//   pinAddress.value = '153, 250';
+
+// }
+// pinMain.addEventListener('mousedown', pinMainMouseDownHandler);
+// pinMain.addEventListener('keydown', function (evt) {
+//   if (evt.keyCode === ENTER_KEYCODE) {
+//     pinMainMouseDownHandler();
+//   }
+// }
+// );
