@@ -170,21 +170,24 @@ var checkStatePage = function (statePage) {
   }
   pinAddress.readOnly = true;
   // Неактивное состояние страницы
+  var coordinateX;
+  var coordinateY;
   if (statePage) {
     mapFilter.classList.add('ad-form--disabled');
 
-    var coordinateX = Math.round(+pinMain.style.left.slice(0, -2) + pinMain.clientWidth / 2);
-    var coordinateY = Math.round(+pinMain.style.top.slice(0, -2) + pinMain.clientHeight / 2);
+    coordinateX = Math.round(+pinMain.style.left.slice(0, -2) + pinMain.clientWidth / 2);
+    coordinateY = Math.round(+pinMain.style.top.slice(0, -2) + pinMain.clientHeight / 2);
     pinAddress.value = coordinateX + ', ' + coordinateY;
 
     // Активное состояние страницы
   } else {
     activateMap();
+    renderPin(dataAds);
     mapFilter.classList.remove('ad-form--disabled');
     map.classList.remove('map--faded');
     form.classList.remove('ad-form--disabled');
-    var coordinateX = Math.round(+pinMain.style.left.slice(0, -2) + pinMain.clientWidth / 2);
-    var coordinateY = Math.round(+pinMain.style.top.slice(0, -2) + pinMain.clientHeight + AVATAR_POINTER_HEIGHT);
+    coordinateX = Math.round(+pinMain.style.left.slice(0, -2) + pinMain.clientWidth / 2);
+    coordinateY = Math.round(+pinMain.style.top.slice(0, -2) + pinMain.clientHeight + AVATAR_POINTER_HEIGHT);
     pinAddress.value = coordinateX + ', ' + coordinateY;
   }
 };
