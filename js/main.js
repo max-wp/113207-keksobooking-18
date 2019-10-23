@@ -121,7 +121,9 @@ var activateMap = function () {
 // Функция создания элементов разметки
 var makeElement = function (tagName, className, text) {
   var element = document.createElement(tagName);
-  element.classList.add(className);
+  if (className) {
+    element.classList.add(className);
+  }
   if (text) {
     element.textContent = text;
   }
@@ -131,10 +133,9 @@ var makeElement = function (tagName, className, text) {
 // Создаем ДОМ-элемент (разметку) метки
 var getPinElement = function (data) {
 
-  var button = document.createElement('button');
-  var img = document.createElement('img');
+  var button = makeElement('button', 'map__pin');
+  var img = makeElement('img');
 
-  button.classList.add('map__pin');
   button.style.left = data.location.x + AVATAR_WIDTH / 2 + 'px';
   button.style.top = data.location.y + AVATAR_HEIGHT + 'px';
 
@@ -150,16 +151,15 @@ var getPinElement = function (data) {
 
 // Отрисовка меток на карте (заполнение блока DOM элементами)
 
-var mapPin = document.querySelector('.map__pins');
-
 var renderPin = function (pin) {
-
+  var listAd = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
+
   for (var i = 0; i < ADS_COUNT; i++) {
     var pinElement = getPinElement(pin[i]);
     fragment.appendChild(pinElement);
   }
-  mapPin.appendChild(fragment);
+  listAd.appendChild(fragment);
 };
 
 // *****************************
@@ -168,28 +168,88 @@ var renderPin = function (pin) {
 
 // Создаем ДОМ-элемент (разметку) объявления на основе template
 var getAdElement = function (data) {
+
   var template = document.querySelector('#card').content;
   var ad = template.querySelector('.map__card');
-  var fragment = document.createDocumentFragment();
 
-  var itemAd = ad.cloneNode(true);
+  var adElement = ad.cloneNode(true);
+  // Селекторы элементов
+  var closeButton = adElement.querySelector('.popup__close');
+  var title = adElement.querySelector('.popup__title');
+  var address = adElement.querySelector('.popup__text--address');
+  var price = adElement.querySelector('.popup__text--price');
+  var priceexplanation = price.querySelector('span');
+  var type = adElement.querySelector('.popup__type');
+  var roomsGuest = adElement.querySelector('.popup__text--capacity');
+  var checkInOut = adElement.querySelector('.popup__text--time');
 
-  var closeButton = itemAd.querySelector('.popup__close');
-  var title = itemAd.querySelector('.popup__title');
-  var address = itemAd.querySelector('.popup__text--address');
-  var price = itemAd.querySelector('.popup__text--price');
-  var type = itemAd.querySelector('.popup__type');
-  var roomsGuest = itemAd.querySelector('.popup__text--capacity');
-  var checkInOut = itemAd.querySelector('.popup__text--time');
-
-  var featureList = itemAd.querySelector('.popup__features');
+  var featureList = adElement.querySelector('.popup__features');
   var featureItem = featureList.querySelectorAll('.popup__feature');
 
-  var description = itemAd.querySelector('.popup__description');
-  var avatar = itemAd.querySelector('.popup__avatar');
-  var photos = itemAd.querySelector('.popup__photos');
+  var description = adElement.querySelector('.popup__description');
+  var avatar = adElement.querySelector('.popup__avatar');
+  var photos = adElement.querySelector('.popup__photos');
+
+  // Передача данных элементам
+
+  // Заголовок
+  title.textContent = data.offer.title;
+
+  // Адрес
+  address.textContent = data.offer.address;
+
+  // Цена
+  price.textContent = data.offer.price;
+  priceexplanation.textContent = ' /ночь';
+  price.appendChild(priceexplanation);
+
+  // Тип удобств
+  switch (data.offer.type) {
+    case 'flat':
+      type.textContent = 'Квартира';
+      break;
+    case 'bungalo':
+      type.textContent = 'Бунгало';
+      break;
+    case 'house':
+      type.textContent = 'Дом';
+      break;
+    case 'palace':
+      type.textContent = 'Дворец';
+      break;
+  }
+  // Комнаты и гости
+  roomsGuest.textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
+
+  // Время заезда и выезда
+  checkInOut.textContent = 'Заезд после' + data.offer.checkin + ', выезд до' + data.offer.checkout;
+
+  // Дополнительные услуги
+
+  // Описание
+  description.textContent = data.offer.description;
+
+  // Изображение
+
+
+  return adElement;
 };
 
+
+// Отрисовка объявлений на карте (заполнение блока DOM элементами)
+
+var renderAd = function (ad) {
+  var listAd = document.querySelector('.map__pins');
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < ADS_COUNT; i++) {
+    var elementAd = getAdElement(ad[i]);
+    fragment.appendChild(elementAd);
+  }
+  listAd.appendChild(fragment);
+};
+
+renderAd(dataAds);
 
 // *****************************
 // Настройки отображения страницы
@@ -220,6 +280,7 @@ var checkStatePage = function (statePage) {
 
     // Активное состояние страницы
   } else {
+
     activateMap();
     renderPin(dataAds);
     mapFilter.classList.remove('ad-form--disabled');
