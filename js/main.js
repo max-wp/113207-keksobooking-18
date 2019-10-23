@@ -153,6 +153,35 @@ var renderPin = function (pin) {
 };
 
 // *****************************
+// Отрисовка объявлений
+// *****************************
+
+// Создаем ДОМ-элемент (разметку) объявления
+var getAdElement = function (data) {
+  var template = document.querySelector('#card').content;
+  var ad = template.querySelector('.map__card');
+  var fragment = document.createDocumentFragment();
+
+  var itemAd = ad.cloneNode(true);
+
+  var closeButton = itemAd.querySelector('.popup__close');
+  var title = itemAd.querySelector('.popup__title');
+  var address = itemAd.querySelector('.popup__text--address');
+  var price = itemAd.querySelector('.popup__text--price');
+  var type = itemAd.querySelector('.popup__type');
+  var roomsGuest = itemAd.querySelector('.popup__text--capacity');
+  var checkInOut = itemAd.querySelector('.popup__text--time');
+
+  var featureList = itemAd.querySelector('.popup__features');
+  var featureItem = featureList.querySelectorAll('.popup__feature');
+
+  var description = itemAd.querySelector('.popup__description');
+  var avatar = itemAd.querySelector('.popup__avatar');
+  var photos = itemAd.querySelector('.popup__photos');
+};
+
+
+// *****************************
 // Настройки отображения страницы
 // *****************************
 
