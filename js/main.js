@@ -118,6 +118,16 @@ var activateMap = function () {
 // Отрисовка меток
 // *****************************
 
+// Функция создания элементов разметки
+var makeElement = function (tagName, className, text) {
+  var element = document.createElement(tagName);
+  element.classList.add(className);
+  if (text) {
+    element.textContent = text;
+  }
+  return element;
+};
+
 // Создаем ДОМ-элемент (разметку) метки
 var getPinElement = function (data) {
 
@@ -125,8 +135,8 @@ var getPinElement = function (data) {
   var img = document.createElement('img');
 
   button.classList.add('map__pin');
-  button.style.left = data.location.x + 25 + 'px';
-  button.style.top = data.location.y + 70 + 'px';
+  button.style.left = data.location.x + AVATAR_WIDTH / 2 + 'px';
+  button.style.top = data.location.y + AVATAR_HEIGHT + 'px';
 
   img.src = data.author.avatar;
   img.alt = data.offer.title;
@@ -156,7 +166,7 @@ var renderPin = function (pin) {
 // Отрисовка объявлений
 // *****************************
 
-// Создаем ДОМ-элемент (разметку) объявления
+// Создаем ДОМ-элемент (разметку) объявления на основе template
 var getAdElement = function (data) {
   var template = document.querySelector('#card').content;
   var ad = template.querySelector('.map__card');
