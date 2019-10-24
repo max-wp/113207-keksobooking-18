@@ -243,7 +243,7 @@ var getAdElement = function (data) {
   checkInOut.textContent = 'Заезд после' + data.offer.checkin + ', выезд до' + data.offer.checkout;
 
   // Дополнительные услуги
-
+  // в разработке
 
   // Описание
   description.textContent = data.offer.description;
