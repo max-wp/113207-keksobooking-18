@@ -57,7 +57,7 @@ var getNewSizeArray = function (array) {
   var rndLength = getRandomLengthArray(array);
   var shuffleArray = getShuffleArray(array);
   var newArray = [];
-  for (var i = 0; i < rndLength; i++) {
+  for (var i = 0; i <= rndLength; i++) {
     newArray[i] = shuffleArray[i];
   }
   return newArray;
@@ -220,12 +220,30 @@ var getAdElement = function (data) {
       break;
   }
   // Комнаты и гости
-  roomsGuest.textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
+
+  var roomText;
+  if (data.offer.rooms === 1) {
+    roomText = ' комната для ';
+  } else if (data.offer.rooms === 100) {
+    roomText = ' комнат для ';
+  } else {
+    roomText = ' комнаты для ';
+  }
+
+  var guestText;
+  if (data.offer.guests === 1) {
+    guestText = ' гостя';
+  } else {
+    guestText = ' гостей';
+  }
+
+  roomsGuest.textContent = data.offer.rooms + roomText + data.offer.guests + guestText;
 
   // Время заезда и выезда
   checkInOut.textContent = 'Заезд после' + data.offer.checkin + ', выезд до' + data.offer.checkout;
 
   // Дополнительные услуги
+
 
   // Описание
   description.textContent = data.offer.description;
@@ -242,6 +260,8 @@ var getAdElement = function (data) {
     photoItem.height = 40;
     photos.appendChild(photoItem);
   }
+  // Аватар
+  avatar.src = data.author.avatar;
 
   // Закрытие попап окна
   var closePopup = function () {
