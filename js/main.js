@@ -184,8 +184,8 @@ var getAdElement = function (data) {
   var roomsGuest = adElement.querySelector('.popup__text--capacity');
   var checkInOut = adElement.querySelector('.popup__text--time');
 
-  var featureList = adElement.querySelector('.popup__features');
-  var featureItem = featureList.querySelectorAll('.popup__feature');
+  // var featureList = adElement.querySelector('.popup__features');
+  // var featureItem = featureList.querySelectorAll('.popup__feature');
 
   var description = adElement.querySelector('.popup__description');
   var avatar = adElement.querySelector('.popup__avatar');
