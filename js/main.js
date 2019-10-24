@@ -230,7 +230,18 @@ var getAdElement = function (data) {
   // Описание
   description.textContent = data.offer.description;
 
-  // Изображение
+  // Фотографии номера
+  while (photos.firstChild) {
+    photos.removeChild(photos.firstChild);
+  }
+
+  for (var i = 0; i < data.offer.photos.length; i++) {
+    var photoItem = makeElement('img', 'popup__photo', 'data.offer.title');
+    photoItem.src = data.offer.photos[i];
+    photoItem.width = 45;
+    photoItem.height = 40;
+    photos.appendChild(photoItem);
+  }
 
   // Закрытие попап окна
   var closePopup = function () {
@@ -240,7 +251,6 @@ var getAdElement = function (data) {
 
   var escPressHandler = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
-      console.log ( evt.keycode);
       closePopup();
     }
   };
