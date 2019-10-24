@@ -16,6 +16,7 @@ var PRICE = {min: 10000, max: 50000};
 var ROOMS = {min: 1, max: 3};
 var GUESTS = {min: 0, max: 5};
 var ENTER_KEYCODE = 13;
+var ESC_KEYCODE = 27;
 
 // *****************************
 // Функции для генерации данных
@@ -231,6 +232,25 @@ var getAdElement = function (data) {
 
   // Изображение
 
+  // Закрытие попап окна
+  var closePopup = function () {
+    adElement.remove();
+    document.removeEventListener('keydown', escPressHandler);
+  };
+
+  var escPressHandler = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      console.log ( evt.keycode);
+      closePopup();
+    }
+  };
+
+  document.addEventListener('keydown', escPressHandler);
+
+  // Закрыть кнопкой
+  closeButton.addEventListener('click', function () {
+    closePopup();
+  });
 
   return adElement;
 };
@@ -248,8 +268,6 @@ var renderAd = function (ad) {
   }
   listAd.appendChild(fragment);
 };
-
-renderAd(dataAds);
 
 // *****************************
 // Настройки отображения страницы
@@ -283,6 +301,7 @@ var checkStatePage = function (statePage) {
 
     activateMap();
     renderPin(dataAds);
+    renderAd(dataAds);
     mapFilter.classList.remove('ad-form--disabled');
     map.classList.remove('map--faded');
     form.classList.remove('ad-form--disabled');
