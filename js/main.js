@@ -277,10 +277,14 @@ var getAdElement = function (data) {
 
   document.addEventListener('keydown', escPressHandler);
 
-  // Закрыть кнопкой
   closeButton.addEventListener('click', function () {
     closePopup();
   });
+
+  // *****************************
+  // Валидация формы
+  // *****************************
+
 
   return adElement;
 };
