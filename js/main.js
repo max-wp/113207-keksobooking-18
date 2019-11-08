@@ -1,115 +1,5 @@
 'use strict';
 
-var ADS_COUNT = 8;
-var NUM_AVATARS = [1, 2, 3, 4, 5, 6, 7, 8];
-var TITLES = ['Заголовок 01', 'Заголовок 02', 'Заголовок 03', 'Заголовок 04', 'Заголовок 05', 'Заголовок 06', 'Заголовок 07', 'Заголовок 08'];
-var TYPES = ['palace', 'flat', 'house', 'bungalo'];
-var CHECKIN = ['12:00', '13:00', '14:00'];
-var CHECKOUT = ['12:00', '13:00', '14:00'];
-var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var DESCRIPTION = ['Описание 01', 'Описание 02', 'Описание 03', 'Описание 04', 'Описание 05', 'Описание 06', 'Описание 07', 'Описание 08'];
-var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-var AVATAR_WIDTH = 50;
-var AVATAR_HEIGHT = 70;
-var AVATAR_POINTER_HEIGHT = 16;
-var PRICE = {min: 10000, max: 50000};
-var ROOMS = {min: 1, max: 3};
-var GUESTS = {min: 0, max: 5};
-var ENTER_KEYCODE = 13;
-var ESC_KEYCODE = 27;
-
-// *****************************
-// Функции для генерации данных
-// *****************************
-
-// Случайная длина массива
-var getRandomLengthArray = function (array) {
-  var randomLength = Math.floor(Math.random() * array.length);
-  return randomLength;
-};
-
-// Случайный индекс массива
-var getRandomElementArray = function (array) {
-  var randomIndex = getRandomLengthArray(array);
-  return array[randomIndex];
-};
-
-// Случайное целое число из указанного диапазона, либо до максимального
-function getRandomNumberInMinMaxOrMax(max, min) {
-  if (!min) {
-    min = 0;
-  }
-  return Math.floor(Math.random() * (max - min) + min);
-}
-
-// Перемешивание элементов массива
-function getShuffleArray(array) {
-  for (var i = array.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var t = array[i];
-    array[i] = array[j];
-    array[j] = t;
-  }
-  return array;
-}
-// Получение массива со случайным набором
-var getNewSizeArray = function (array) {
-  var rndLength = getRandomLengthArray(array);
-  var shuffleArray = getShuffleArray(array);
-  var newArray = [];
-  for (var i = 0; i <= rndLength; i++) {
-    newArray[i] = shuffleArray[i];
-  }
-  return newArray;
-};
-
-// *****************************
-// Структура данных
-// *****************************
-
-// Функция получения массива данных моки;
-
-var map = document.querySelector('.map');
-var mapWidth = map.clientWidth;
-
-var locationX = mapWidth - AVATAR_WIDTH / 2;
-var locationYmin = 130 - AVATAR_HEIGHT;
-var locattionYmax = 630 - AVATAR_HEIGHT;
-var locationY = {min: locationYmin, max: locattionYmax};
-
-var getDataAd = function () {
-  var dataAds = [];
-  for (var i = 0; i < ADS_COUNT; i++) {
-    var xLocation = getRandomNumberInMinMaxOrMax(locationX);
-    var yLocation = getRandomNumberInMinMaxOrMax(locationY.max, locationY.min);
-
-    dataAds[i] = {
-      'author': {
-        'avatar': 'img/avatars/user0' + NUM_AVATARS[i] + '.png'
-      },
-      'offer': {
-        'title': TITLES[i],
-        'address': xLocation + ',' + yLocation,
-        'price': getRandomNumberInMinMaxOrMax(PRICE.max, PRICE.min),
-        'type': getRandomElementArray(TYPES),
-        'rooms': getRandomNumberInMinMaxOrMax(ROOMS.max, ROOMS.min),
-        'guests': getRandomNumberInMinMaxOrMax(GUESTS.max, GUESTS.min),
-        'checkin': getRandomElementArray(CHECKIN),
-        'checkout': getRandomElementArray(CHECKOUT),
-        'features': getNewSizeArray(FEATURES),
-        'description': DESCRIPTION[i],
-        'photos': getNewSizeArray(PHOTOS)
-      },
-      'location': {
-        'x': xLocation,
-        'y': yLocation
-      }
-    };
-  }
-  return dataAds;
-};
-var dataAds = getDataAd();
-
 // Переключаем карту из неактивного состояния в активное
 var activateMap = function () {
   map.classList.remove('map--faded');
@@ -284,23 +174,21 @@ var getAdElement = function (data) {
   // *****************************
   // Валидация формы
   // *****************************
+  validityForm();
 
 
-  return adElement;
-};
+  // Отрисовка объявлений на карте (заполнение блока DOM элементами)
 
+  var renderAd = function (ad) {
+    var listAd = document.querySelector('.map__pins');
+    var fragment = document.createDocumentFragment();
 
-// Отрисовка объявлений на карте (заполнение блока DOM элементами)
-
-var renderAd = function (ad) {
-  var listAd = document.querySelector('.map__pins');
-  var fragment = document.createDocumentFragment();
-
-  for (var i = 0; i < ADS_COUNT; i++) {
-    var elementAd = getAdElement(ad[i]);
-    fragment.appendChild(elementAd);
-  }
-  listAd.appendChild(fragment);
+    for (var i = 0; i < ADS_COUNT; i++) {
+      var elementAd = getAdElement(ad[i]);
+      fragment.appendChild(elementAd);
+    }
+    listAd.appendChild(fragment);
+  };
 };
 
 // *****************************
