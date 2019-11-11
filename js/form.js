@@ -4,6 +4,7 @@
 // *****************************
 var validationForm = function () {
 // Поля формы
+
   var inputTitle = form.querySelector('#title');
   var inputPrice = form.querySelector('#price');
   var inputType = form.querySelector('#type');
@@ -91,4 +92,5 @@ var validationForm = function () {
     }
     evt.preventDefault();
   });
-}
+};
+validationForm()

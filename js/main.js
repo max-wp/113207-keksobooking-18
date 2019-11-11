@@ -123,32 +123,17 @@ var getAdElement = function (data) {
     closePopup();
   });
 
-  // // Валидация формы
-  validationForm();
+  // Вызов функции валидации формы
+  // validationForm();
 
   return adElement;
 };
-
-// Отрисовка объявлений на карте (заполнение блока DOM элементами)
-
-var renderAd = function (ad) {
-  var listAd = document.querySelector('.map__pins');
-  var fragment = document.createDocumentFragment();
-
-  for (var i = 0; i < ADS_COUNT; i++) {
-    var elementAd = getAdElement(ad[i]);
-    fragment.appendChild(elementAd);
-  }
-  listAd.appendChild(fragment);
-};
-
 
 // *****************************
 // Настройки отображения страницы
 // *****************************
 
 var form = document.querySelector('.ad-form');
-// var pinMain = document.querySelector('.map__pin--main');
 var mapFilter = document.querySelector('.map__filters');
 var fieldsets = form.querySelectorAll('fieldset');
 var pinAddress = document.querySelector('#address');
@@ -185,19 +170,3 @@ var checkStatePage = function (statePage) {
   }
 };
 checkStatePage(true);
-
-// // Обработчик нажатия кнопки на главной метке
-
-// function pinMainClickHandler(evt) {
-//   checkStatePage(false);
-//   evt.preventDefault();
-// }
-
-// pinMain.addEventListener('mousedown', pinMainClickHandler);
-// pinMain.addEventListener('keydown', function (evt) {
-//   if (evt.keyCode === ENTER_KEYCODE) {
-//     pinMainClickHandler();
-//   }
-//   evt.preventDefault();
-// }
-// );
