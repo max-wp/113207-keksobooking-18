@@ -1,6 +1,9 @@
 'use strict';
-var validityForm = function () {
-  // Поля формы
+// *****************************
+// Валидация формы
+// *****************************
+var validationForm = function () {
+// Поля формы
   var inputTitle = form.querySelector('#title');
   var inputPrice = form.querySelector('#price');
   var inputType = form.querySelector('#type');
@@ -88,7 +91,4 @@ var validityForm = function () {
     }
     evt.preventDefault();
   });
-
-
-  return adElement;
-};
+}
