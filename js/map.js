@@ -47,3 +47,21 @@ var renderPin = function (pin) {
   }
   listAd.appendChild(fragment);
 }
+
+// Обработчик нажатия кнопки на главной метке
+
+var pinMain = document.querySelector('.map__pin--main');
+
+function pinMainClickHandler(evt) {
+  checkStatePage(false);
+  evt.preventDefault();
+}
+
+pinMain.addEventListener('mousedown', pinMainClickHandler);
+pinMain.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    pinMainClickHandler();
+  }
+  evt.preventDefault();
+}
+);

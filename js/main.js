@@ -148,7 +148,7 @@ var renderAd = function (ad) {
 // *****************************
 
 var form = document.querySelector('.ad-form');
-var pinMain = document.querySelector('.map__pin--main');
+// var pinMain = document.querySelector('.map__pin--main');
 var mapFilter = document.querySelector('.map__filters');
 var fieldsets = form.querySelectorAll('fieldset');
 var pinAddress = document.querySelector('#address');
@@ -186,18 +186,18 @@ var checkStatePage = function (statePage) {
 };
 checkStatePage(true);
 
-// Обработчик нажатия кнопки на главной метке
+// // Обработчик нажатия кнопки на главной метке
 
-function pinMainClickHandler(evt) {
-  checkStatePage(false);
-  evt.preventDefault();
-}
+// function pinMainClickHandler(evt) {
+//   checkStatePage(false);
+//   evt.preventDefault();
+// }
 
-pinMain.addEventListener('mousedown', pinMainClickHandler);
-pinMain.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ENTER_KEYCODE) {
-    pinMainClickHandler();
-  }
-  evt.preventDefault();
-}
-);
+// pinMain.addEventListener('mousedown', pinMainClickHandler);
+// pinMain.addEventListener('keydown', function (evt) {
+//   if (evt.keyCode === ENTER_KEYCODE) {
+//     pinMainClickHandler();
+//   }
+//   evt.preventDefault();
+// }
+// );
