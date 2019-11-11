@@ -35,10 +35,10 @@ function getShuffleArray(array) {
 }
 // Получение массива со случайным набором
 var getNewSizeArray = function (array) {
-  var rndLength = getRandomLengthArray(array);
+  var randomLength = getRandomLengthArray(array);
   var shuffleArray = getShuffleArray(array);
   var newArray = [];
-  for (var i = 0; i <= rndLength; i++) {
+  for (var i = 0; i <= randomLength; i++) {
     newArray[i] = shuffleArray[i];
   }
   return newArray;

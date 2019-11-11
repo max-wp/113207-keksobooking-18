@@ -25,18 +25,18 @@ var makeElement = function (tagName, className, text) {
 var getPinElement = function (data) {
 
   var button = makeElement('button', 'map__pin');
-  var img = makeElement('img');
+  var picture = makeElement('img');
 
   button.style.left = data.location.x + AVATAR_WIDTH / 2 + 'px';
   button.style.top = data.location.y + AVATAR_HEIGHT + 'px';
 
-  img.src = data.author.avatar;
-  img.alt = data.offer.title;
-  img.style.width = '40' + 'px';
-  img.style.height = '40' + 'px';
-  img.draggable = false;
+  picture.src = data.author.avatar;
+  picture.alt = data.offer.title;
+  picture.style.width = '40' + 'px';
+  picture.style.height = '40' + 'px';
+  picture.draggable = false;
 
-  button.appendChild(img);
+  button.appendChild(picture);
   return button;
 };
 
@@ -296,14 +296,14 @@ var getDataAd = function () {
       'offer': {
         'title': TITLES[i],
         'address': xLocation + ',' + yLocation,
-        'price': getRandomNumberInMinMaxOrMax(PRICE.max, PRICE.min),
+        'price': getRandomNumberInMinMaxOrMax(Price.MAX, Price.MIN),
         'type': getRandomElementArray(TYPES),
-        'rooms': getRandomNumberInMinMaxOrMax(ROOMS.max, ROOMS.min),
-        'guests': getRandomNumberInMinMaxOrMax(GUESTS.max, GUESTS.min),
-        'checkin': getRandomElementArray(CHECKIN),
-        'checkout': getRandomElementArray(CHECKOUT),
+        'rooms': getRandomNumberInMinMaxOrMax(Room.MAX, Room.MIN),
+        'guests': getRandomNumberInMinMaxOrMax(Guest.MAX, Guest.MIN),
+        'checkin': getRandomElementArray(INTERVALS),
+        'checkout': getRandomElementArray(INTERVALS),
         'features': getNewSizeArray(FEATURES),
-        'description': DESCRIPTION[i],
+        'description': DESCRIPTIONS[i],
         'photos': getNewSizeArray(PHOTOS)
       },
       'location': {
