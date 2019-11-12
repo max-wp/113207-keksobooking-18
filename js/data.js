@@ -16,8 +16,8 @@ var locationY = {min: locationYmin, max: locattionYmax};
 var getDataAd = function () {
   var dataAds = [];
   for (var i = 0; i < ADS_COUNT; i++) {
-    var xLocation = getRandomNumberInMinMaxOrMax(locationX);
-    var yLocation = getRandomNumberInMinMaxOrMax(locationY.max, locationY.min);
+    var xLocation = window.util.getRandomNumberInMinMaxOrMax(locationX);
+    var yLocation = window.util.getRandomNumberInMinMaxOrMax(locationY.max, locationY.min);
 
     dataAds[i] = {
       'author': {
@@ -26,15 +26,15 @@ var getDataAd = function () {
       'offer': {
         'title': TITLES[i],
         'address': xLocation + ',' + yLocation,
-        'price': getRandomNumberInMinMaxOrMax(Price.MAX, Price.MIN),
-        'type': getRandomElementArray(TYPES),
-        'rooms': getRandomNumberInMinMaxOrMax(Room.MAX, Room.MIN),
-        'guests': getRandomNumberInMinMaxOrMax(Guest.MAX, Guest.MIN),
-        'checkin': getRandomElementArray(INTERVALS),
-        'checkout': getRandomElementArray(INTERVALS),
-        'features': getNewSizeArray(FEATURES),
+        'price': window.util.getRandomNumberInMinMaxOrMax(Price.MAX, Price.MIN),
+        'type': window.util.getRandomElementArray(TYPES),
+        'rooms': window.util.getRandomNumberInMinMaxOrMax(Room.MAX, Room.MIN),
+        'guests': window.util.getRandomNumberInMinMaxOrMax(Guest.MAX, Guest.MIN),
+        'checkin': window.util.getRandomElementArray(INTERVALS),
+        'checkout': window.util.getRandomElementArray(INTERVALS),
+        'features': window.util.getNewSizeArray(FEATURES),
         'description': DESCRIPTIONS[i],
-        'photos': getNewSizeArray(PHOTOS)
+        'photos': window.util.getNewSizeArray(PHOTOS)
       },
       'location': {
         'x': xLocation,
