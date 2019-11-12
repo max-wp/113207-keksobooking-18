@@ -46,7 +46,7 @@ var renderPin = function (pin) {
     fragment.appendChild(pinElement);
   }
   listAd.appendChild(fragment);
-}
+};
 
 // Обработчик нажатия кнопки на главной метке
 

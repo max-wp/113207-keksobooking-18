@@ -2,7 +2,7 @@
 // *****************************
 // Валидация формы
 // *****************************
-var validationForm = function () {
+(function () {
 // Поля формы
 
   var inputTitle = form.querySelector('#title');
@@ -92,5 +92,5 @@ var validationForm = function () {
     }
     evt.preventDefault();
   });
-};
-validationForm()
+
+})();
