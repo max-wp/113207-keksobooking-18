@@ -92,7 +92,7 @@ var getAdElement = function (data) {
   }
 
   for (var i = 0; i < data.offer.photos.length; i++) {
-    var photoItem = makeElement('img', 'popup__photo', 'data.offer.title');
+    var photoItem = window.util.makeElement('img', 'popup__photo', 'data.offer.title');
     photoItem.src = data.offer.photos[i];
     photoItem.width = 45;
     photoItem.height = 40;

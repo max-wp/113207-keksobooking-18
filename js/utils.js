@@ -47,13 +47,26 @@
     return newArray;
   };
 
+  // Функция создания элементов разметки
+  var makeElement = function (tagName, className, text) {
+    var element = document.createElement(tagName);
+    if (className) {
+      element.classList.add(className);
+    }
+    if (text) {
+      element.textContent = text;
+    }
+    return element;
+  };
+
   window.util = {
 
     getRandomLengthArray: getRandomLengthArray,
     getRandomElementArray: getRandomElementArray,
     getRandomNumberInMinMaxOrMax: getRandomNumberInMinMaxOrMax,
     getShuffleArray: getShuffleArray,
-    getNewSizeArray: getNewSizeArray
+    getNewSizeArray: getNewSizeArray,
+    makeElement: makeElement
 
   };
 

@@ -49,7 +49,7 @@ var checkStatePage = function (statePage) {
   } else {
 
     activateMap();
-    renderPin(window.data.dataAds);
+    window.renderPin(window.data.dataAds);
     renderAd(window.data.dataAds);
     mapFilter.classList.remove('ad-form--disabled');
     map.classList.remove('map--faded');
