@@ -2,7 +2,6 @@
 
 // Функция получения массива данных моки;
 
-
 (function () {
 
   var ADS_COUNT = 8;
@@ -58,8 +57,8 @@
   }
   window.data = {
     dataAds: dataAds,
-
+    avatarWidth: AVATAR_WIDTH,
+    avatarHeight: AVATAR_HEIGHT
   };
-
 
 })();
