@@ -3,6 +3,8 @@
 // Отрисовка объявлений
 // *****************************
 
+var ESC_KEYCODE = 27;
+
 // Создаем ДОМ-элемент (разметку) объявления на основе template
 var getAdElement = function (data) {
 
@@ -125,10 +127,9 @@ var renderAd = function (ad) {
   var listAd = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < ADS_COUNT; i++) {
+  for (var i = 0; i < ad.length; i++) {
     var elementAd = getAdElement(ad[i]);
     fragment.appendChild(elementAd);
   }
   listAd.appendChild(fragment);
-};
-
+}

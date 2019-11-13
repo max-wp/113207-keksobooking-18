@@ -4,6 +4,8 @@
 // Отрисовка меток
 // *****************************
 
+var ENTER_KEYCODE = 13;
+
 // Функция создания элементов разметки
 var makeElement = function (tagName, className, text) {
   var element = document.createElement(tagName);
@@ -41,7 +43,7 @@ var renderPin = function (pin) {
   var listAd = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < ADS_COUNT; i++) {
+  for (var i = 0; i < pin.length; i++) {
     var pinElement = getPinElement(pin[i]);
     fragment.appendChild(pinElement);
   }

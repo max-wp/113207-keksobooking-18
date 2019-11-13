@@ -116,7 +116,8 @@
             placeholder="Милая, уютная квартирка в центре Токио"
             required
             minlength="30"
-            maxlength="100">
+            maxlength="100"
+            required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес</label>
@@ -141,8 +142,8 @@
             name="price"
             type="number"
             placeholder="1000"
-            required
-            maxlength="1000000">
+            max="1000000"
+            required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--time">
           <label class="ad-form__label" for="timein">Время заезда и выезда</label>
@@ -272,12 +273,13 @@
       <button class="error__button" href="#">Попробовать снова</button>
     </div>
   </template>
-  <script src = js/const.js></script>
+
   <script src = js/utils.js></script>
   <script src = js/map.js></script>
   <script src = js/card.js></script>
   <script src = js/data.js></script>
-  <script src = js/main.js></script>
   <script src = js/form.js></script>
+  <script src = js/main.js></script>
+
 </body>
 </html>

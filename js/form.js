@@ -2,20 +2,20 @@
 
 (function () {
 // Поля формы
-
-  var inputTitle = form.querySelector('#title');
-  var inputPrice = form.querySelector('#price');
-  var inputType = form.querySelector('#type');
-  var inputTimein = form.querySelector('#timein');
-  var inputTimeout = form.querySelector('#timeout');
-  var inputRoomNumber = form.querySelector('#room_number');
-  var inputCapacity = form.querySelector('#capacity');
+  window.form = document.querySelector('.ad-form');
+  var inputTitle = window.form.querySelector('#title');
+  var inputPrice = window.form.querySelector('#price');
+  var inputType = window.form.querySelector('#type');
+  var inputTimein = window.form.querySelector('#timein');
+  var inputTimeout = window.form.querySelector('#timeout');
+  var inputRoomNumber = window.form.querySelector('#room_number');
+  var inputCapacity = window.form.querySelector('#capacity');
 
   // Валидация заголовка
   inputTitle.addEventListener('invalid', function () {
     if (inputTitle.validity.tooShort) {
       var min = inputTitle.getAttribute('minLength');
-      inputTitle.setCustomValidity('Имя должно состоять минимум из ' + min + ' -ти символов');
+      inputTitle.setCustomValidity('Имя должно состоять минимум из ' + min + '-ти символов');
     } else if (inputTitle.validity.tooLong) {
       inputTitle.setCustomValidity('Имя не должно превышать 25-ти символов');
     } else if (inputTitle.validity.valueMissing) {

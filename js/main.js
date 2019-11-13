@@ -1,12 +1,9 @@
 'use strict';
 
-// *****************************
-// Настройки отображения страницы
-// *****************************
-
-var form = document.querySelector('.ad-form');
+var AVATAR_POINTER_HEIGHT = 16;
+var map = document.querySelector('.map');
 var mapFilter = document.querySelector('.map__filters');
-var fieldsets = form.querySelectorAll('fieldset');
+var fieldsets = window.form.querySelectorAll('fieldset');
 var pinAddress = document.querySelector('#address');
 
 // Переключаем карту из неактивного состояния в активное
@@ -39,7 +36,7 @@ var checkStatePage = function (statePage) {
     renderAd(dataAds);
     mapFilter.classList.remove('ad-form--disabled');
     map.classList.remove('map--faded');
-    form.classList.remove('ad-form--disabled');
+    window.form.classList.remove('ad-form--disabled');
     coordinateX = Math.round(+pinMain.style.left.slice(0, -2) + pinMain.clientWidth / 2);
     coordinateY = Math.round(+pinMain.style.top.slice(0, -2) + pinMain.clientHeight + AVATAR_POINTER_HEIGHT);
     pinAddress.value = coordinateX + ', ' + coordinateY;
