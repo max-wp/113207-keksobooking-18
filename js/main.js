@@ -50,7 +50,7 @@ var checkStatePage = function (statePage) {
 
     activateMap();
     window.renderPin(window.data.dataAds);
-    renderAd(window.data.dataAds);
+    window.renderAd(window.data.dataAds);
     mapFilter.classList.remove('ad-form--disabled');
     map.classList.remove('map--faded');
     window.form.classList.remove('ad-form--disabled');
