@@ -1,8 +1,7 @@
 'use strict';
 
 // Функция получения массива данных моки;
-var AVATAR_WIDTH = 50;
-var AVATAR_HEIGHT = 70;
+
 
 (function () {
 
@@ -29,12 +28,12 @@ var AVATAR_HEIGHT = 70;
   var locattionYmax = 630 - AVATAR_HEIGHT;
   var locationY = {min: locationYmin, max: locattionYmax};
 
-  window.dataAds = [];
+  var dataAds = [];
   for (var i = 0; i < ADS_COUNT; i++) {
     var xLocation = window.util.getRandomNumberInMinMaxOrMax(locationX);
     var yLocation = window.util.getRandomNumberInMinMaxOrMax(locationY.max, locationY.min);
 
-    window.dataAds[i] = {
+    dataAds[i] = {
       'author': {
         'avatar': 'img/avatars/user0' + NUM_AVATARS[i] + '.png'
       },
@@ -57,5 +56,10 @@ var AVATAR_HEIGHT = 70;
       }
     };
   }
+  window.data = {
+    dataAds: dataAds,
+
+  };
+
 
 })();

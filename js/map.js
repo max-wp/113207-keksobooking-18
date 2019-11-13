@@ -4,8 +4,6 @@
 // Отрисовка меток
 // *****************************
 
-var ENTER_KEYCODE = 13;
-
 // Функция создания элементов разметки
 var makeElement = function (tagName, className, text) {
   var element = document.createElement(tagName);
@@ -24,8 +22,8 @@ var getPinElement = function (data) {
   var button = makeElement('button', 'map__pin');
   var picture = makeElement('img');
 
-  button.style.left = data.location.x + AVATAR_WIDTH / 2 + 'px';
-  button.style.top = data.location.y + AVATAR_HEIGHT + 'px';
+  button.style.left = data.location.x + window.data.avatarWidth / 2 + 'px';
+  button.style.top = data.location.y + window.data.avatarHeight + 'px';
 
   picture.src = data.author.avatar;
   picture.alt = data.offer.title;
@@ -49,21 +47,3 @@ var renderPin = function (pin) {
   }
   listAd.appendChild(fragment);
 };
-
-// Обработчик нажатия кнопки на главной метке
-
-var pinMain = document.querySelector('.map__pin--main');
-
-function pinMainClickHandler(evt) {
-  checkStatePage(false);
-  evt.preventDefault();
-}
-
-pinMain.addEventListener('mousedown', pinMainClickHandler);
-pinMain.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ENTER_KEYCODE) {
-    pinMainClickHandler();
-  }
-  evt.preventDefault();
-}
-);

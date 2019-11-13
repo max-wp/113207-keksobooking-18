@@ -1,5 +1,5 @@
 'use strict';
-
+var ENTER_KEYCODE = 13;
 var AVATAR_POINTER_HEIGHT = 16;
 var map = document.querySelector('.map');
 var mapFilter = document.querySelector('.map__filters');
@@ -11,6 +11,22 @@ var activateMap = function () {
   map.classList.remove('map--faded');
 };
 
+// Обработчик нажатия кнопки на главной метке
+
+var pinMain = document.querySelector('.map__pin--main');
+
+function pinMainClickHandler() {
+  checkStatePage(false);
+}
+
+pinMain.addEventListener('mousedown', pinMainClickHandler);
+pinMain.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    pinMainClickHandler();
+  }
+}
+);
+
 // Определение состояния страницы (активная/неактивная)
 var checkStatePage = function (statePage) {
 
@@ -18,6 +34,7 @@ var checkStatePage = function (statePage) {
     fieldsets[i].disabled = statePage;
   }
   pinAddress.readOnly = true;
+
   // Неактивное состояние страницы
   var coordinateX;
   var coordinateY;
@@ -32,8 +49,8 @@ var checkStatePage = function (statePage) {
   } else {
 
     activateMap();
-    renderPin(dataAds);
-    renderAd(dataAds);
+    renderPin(window.data.dataAds);
+    renderAd(window.data.dataAds);
     mapFilter.classList.remove('ad-form--disabled');
     map.classList.remove('map--faded');
     window.form.classList.remove('ad-form--disabled');
@@ -43,3 +60,4 @@ var checkStatePage = function (statePage) {
   }
 };
 checkStatePage(true);
+
