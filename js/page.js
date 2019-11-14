@@ -17,8 +17,8 @@
   // Обработчик нажатия кнопки на главной метке
 
   var pinMain = document.querySelector('.map__pin--main');
-
-  function pinMainClickHandler() {
+  function pinMainClickHandler(evt) {
+    evt.preventDefault();
     checkStatePage(false);
   }
 
@@ -29,6 +29,45 @@
     }
   }
   );
+
+  // Обработчик перемещения главной метки
+
+
+  pinMain.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var StartCoords = {
+      X: evt.clientX,
+      Y: evt.clientY
+    };
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var Shift = {
+        X: StartCoords.X - moveEvt.clientX,
+        Y: StartCoords.Y - moveEvt.clientY
+      };
+
+      StartCoords = {
+        X: moveEvt.clientX,
+        Y: moveEvt.clientY
+      };
+
+      pinMain.style.top = (pinMain.offsetTop - Shift.Y) + 'px';
+      pinMain.style.left = (pinMain.offsetLeft - Shift.X) + 'px';
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+
+  });
 
   // Определение состояния страницы (активная/неактивная)
   var checkStatePage = function (statePage) {
