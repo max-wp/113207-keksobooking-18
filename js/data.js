@@ -1,7 +1,5 @@
 'use strict';
 
-// Функция получения массива данных моки;
-
 (function () {
 
   var ADS_COUNT = 8;
