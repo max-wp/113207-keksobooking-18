@@ -32,7 +32,6 @@
 
   // Обработчик перемещения главной метки
 
-
   pinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
