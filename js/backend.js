@@ -4,7 +4,7 @@
   var STATUS_SUCCESS = 200;
   var URL = 'https://js.dump.academy/keksobooking';
   var URL_DATA = 'https://js.dump.academy/keksobooking/data';
-  //  Отправка данных на сервер
+
   var save = function (data, successHandler, errorHandler) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -21,7 +21,6 @@
     xhr.send(data);
   };
 
-  //  Получение данных с сервера
   var load = function (successHandler, errorHandler) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -40,7 +39,7 @@
       errorHandler('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 5000; // 5s
+    xhr.timeout = 5000;
     xhr.open('GET', URL_DATA);
     xhr.send();
   };

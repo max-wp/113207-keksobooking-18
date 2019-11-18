@@ -1,94 +1,215 @@
 'use strict';
 
 (function () {
-// Поля формы
-  window.form = document.querySelector('.ad-form');
-  var inputTitle = window.form.querySelector('#title');
-  var inputPrice = window.form.querySelector('#price');
-  var inputType = window.form.querySelector('#type');
-  var inputTimein = window.form.querySelector('#timein');
-  var inputTimeout = window.form.querySelector('#timeout');
-  var inputRoomNumber = window.form.querySelector('#room_number');
-  var inputCapacity = window.form.querySelector('#capacity');
+  var DEFAULT_AVATAR = 'img/muffin-grey.svg';
 
-  // Валидация заголовка
-  inputTitle.addEventListener('invalid', function () {
-    if (inputTitle.validity.tooShort) {
-      var min = inputTitle.getAttribute('minLength');
-      inputTitle.setCustomValidity('Имя должно состоять минимум из ' + min + '-ти символов');
-    } else if (inputTitle.validity.tooLong) {
-      inputTitle.setCustomValidity('Имя не должно превышать 25-ти символов');
-    } else if (inputTitle.validity.valueMissing) {
-      inputTitle.setCustomValidity('Поле обязательно для заполнения');
+  var titleInput = document.querySelector('input[name="title"]');
+  titleInput.addEventListener('invalid', function () {
+    if (titleInput.validity.tooShort) {
+      titleInput.setCustomValidity('Минимальная длина заголовка — 30 символов');
+    } else if (titleInput.validity.tooLong) {
+      titleInput.setCustomValidity('Максимальная длина заголовка — 100 символов');
+    } else if (titleInput.validity.valueMissing) {
+      titleInput.setCustomValidity('Обязательное поле');
     } else {
-      inputTitle.setCustomValidity('');
+      titleInput.setCustomValidity('');
     }
   });
 
-  // Валидация цены за ночь в соответствии с выбранным типом жилья
-  inputType.addEventListener('change', function (evt) {
-    inputType.value = evt.target.value;
-    if (evt.target.value === 'bungalo') {
-      inputPrice.setAttribute('min', 0);
-      inputPrice.setAttribute('placeholder', 0);
-    } else if (evt.target.value === 'flat') {
-      inputPrice.setAttribute('min', 1000);
-      inputPrice.setAttribute('placeholder', 1000);
-    } else if (evt.target.value === 'house') {
-      inputPrice.setAttribute('min', 5000);
-      inputPrice.setAttribute('placeholder', 5000);
+  var roomsSelect = document.querySelector('select[name="rooms"]');
+  var capacitySelect = document.querySelector('select[name="capacity"]');
+  var maxValueMap = {
+    '1': 1,
+    '2': 2,
+    '3': 3,
+    '100': 0,
+  };
+  roomsSelect.addEventListener('change', function () {
+    var maxValue = parseInt(maxValueMap[roomsSelect.value], 10);
+    if (capacitySelect.value !== maxValue) {
+      capacitySelect.value = maxValue;
+    }
+    if (maxValue === 0) {
+      capacitySelect[0].removeAttribute('disabled', '');
+      capacitySelect[1].setAttribute('disabled', '');
+      capacitySelect[2].setAttribute('disabled', '');
+      capacitySelect[3].setAttribute('disabled', '');
+    }
+    if (maxValue === 1) {
+      capacitySelect[0].setAttribute('disabled', '');
+      capacitySelect[1].removeAttribute('disabled', '');
+      capacitySelect[2].setAttribute('disabled', '');
+      capacitySelect[3].setAttribute('disabled', '');
+    }
+    if (maxValue === 2) {
+      capacitySelect[0].setAttribute('disabled', '');
+      capacitySelect[1].removeAttribute('disabled', '');
+      capacitySelect[2].removeAttribute('disabled', '');
+      capacitySelect[3].setAttribute('disabled', '');
+    }
+    if (maxValue === 3) {
+      capacitySelect[0].setAttribute('disabled', '');
+      capacitySelect[1].removeAttribute('disabled', '');
+      capacitySelect[2].removeAttribute('disabled', '');
+      capacitySelect[3].removeAttribute('disabled', '');
+    }
+  });
+
+  var priceInput = document.querySelector('input[name="price"]');
+  var type = document.querySelector('select[name="type"]');
+  type.addEventListener('change', function () {
+    priceInput.setAttribute('min', window.util.tipeToPrice[type.value]);
+    priceInput.placeholder = window.util.tipeToPrice[type.value];
+  });
+
+  priceInput.addEventListener('invalid', function () {
+    if (priceInput.validity.rangeOverflow) {
+      priceInput.setCustomValidity('Максимальная цена за ночь — 1 000 000 руб.');
+    } else if (priceInput.validity.rangeUnderflow) {
+      if (type.value === 'bungalo') {
+        priceInput.setCustomValidity('Минимальная цена за ночь в бунгало 0 руб.');
+      } else if (type.value === 'flat') {
+        priceInput.setCustomValidity('Минимальная цена за ночь в квартире 1 000 руб.');
+      } else if (type.value === 'house') {
+        priceInput.setCustomValidity('Минимальная цена за ночь в доме 5 000 руб.');
+      } else if (type.value === 'palace') {
+        priceInput.setCustomValidity('Минимальная цена за ночь во дворце 10 000 руб.');
+      } else {
+        priceInput.setCustomValidity('');
+      }
+    } else if (priceInput.validity.valueMissing) {
+      priceInput.setCustomValidity('Обязательное поле');
+    } else if (priceInput.validity.typeMismatch) {
+      priceInput.setCustomValidity('Введите число');
     } else {
-      inputPrice.setAttribute('min', 10000);
-      inputPrice.setAttribute('placeholder', 10000);
+      priceInput.setCustomValidity('');
     }
   });
 
-  // Валидация времени заезда и выезда
-
-  inputTimein.addEventListener('change', function (evt) {
-    var target = evt.target.options.selectedIndex;
-    inputTimeout.options[target].selected = true;
+  var timeIn = document.querySelector('select[name="timein"]');
+  var timeOut = document.querySelector('select[name="timeout"]');
+  timeIn.addEventListener('change', function () {
+    timeOut.value = timeIn.value;
+  });
+  timeOut.addEventListener('change', function () {
+    timeIn.value = timeOut.value;
   });
 
-  inputTimeout.addEventListener('change', function (evt) {
-    var target = evt.target.options.selectedIndex;
-    inputTimein.options[target].selected = true;
+  var avatarChooser = document.querySelector('.ad-form__field input[type="file"]');
+  var avatarPreview = document.querySelector('.ad-form-header__preview img');
+  avatarChooser.addEventListener('change', function () {
+    window.loadFiles.setPicture(avatarChooser, true, avatarPreview);
   });
 
-  // Валидация количества комнат и гостей
+  var photoChooser = document.querySelector('.ad-form__upload input[type="file"]');
+  photoChooser.addEventListener('change', function () {
+    var photoPreview = document.createElement('img');
+    window.loadFiles.setPicture(photoChooser, false, photoPreview);
+    document.querySelector('.ad-form__photo').appendChild(photoPreview);
+  });
 
-  inputRoomNumber.addEventListener('change', function (evt) {
-    var target = evt.target.options.selectedIndex;
-    if (target === 0) {
+  var resetPicture = function () {
+    avatarPreview.src = DEFAULT_AVATAR;
+    var photoPreview = document.querySelectorAll('.ad-form__photo img');
+    photoPreview.forEach(function (element, i) {
+      photoPreview[i].remove();
+    });
+  };
 
-      inputCapacity.options[2].disabled = false;
-      inputCapacity.options[0].disabled = true;
-      inputCapacity.options[1].disabled = true;
-      inputCapacity.options[3].disabled = true;
+  var removePins = function () {
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    pins.forEach(function (element, i) {
+      pins[i].remove();
+    });
+  };
 
-    } else if (target === 1) {
-
-      inputCapacity.options[1].disabled = false;
-      inputCapacity.options[2].disabled = false;
-      inputCapacity.options[0].disabled = true;
-      inputCapacity.options[3].disabled = true;
-
-    } else if (target === 2) {
-
-      inputCapacity.options[0].disabled = false;
-      inputCapacity.options[1].disabled = false;
-      inputCapacity.options[2].disabled = false;
-      inputCapacity.options[3].disabled = true;
-
-    } else if (target === 3) {
-
-      inputCapacity.options[3].disabled = false;
-      inputCapacity.options[0].disabled = true;
-      inputCapacity.options[1].disabled = true;
-      inputCapacity.options[2].disabled = true;
-
+  var removePopupCards = function () {
+    if (map.querySelector('.popup')) {
+      map.removeChild(map.querySelector('.popup'));
     }
+  };
+
+  var map = document.querySelector('.map');
+  var pageDisabledHandler = function () {
+    document.querySelector('.map').classList.add('map--faded');
+    document.querySelector('.ad-form').reset();
+    document.querySelector('.map__filters').reset();
+    document.querySelector('.ad-form').classList.add('ad-form--disabled');
+    removePins();
+    removePopupCards();
+    resetPicture();
+    window.util.mapPinMain.classList.remove('hidden');
+    priceInput.placeholder = 1000;
+    window.map.setMainPinCoordinates();
+    window.map.getDisabledFieldsets();
+    window.util.mapPinMain.style.top = window.util.mainPinStartPositionY;
+    window.util.mapPinMain.style.left = window.util.mainPinStartPositionX;
+    capacitySelect[0].setAttribute('disabled', '');
+    capacitySelect[1].removeAttribute('disabled', '');
+    capacitySelect[2].setAttribute('disabled', '');
+    capacitySelect[3].setAttribute('disabled', '');
+  };
+
+  var formReset = document.querySelector('.ad-form__reset');
+  formReset.addEventListener('click', pageDisabledHandler);
+
+  var closeMessage = function (message) {
+    message.remove();
+  };
+
+  var showSuccessMessage = function () {
+    var successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+    var successMessageElement = successMessageTemplate.cloneNode(true);
+
+    document.querySelector('main').insertAdjacentElement('afterbegin', successMessageElement);
+
+    var successMessage = document.querySelector('.success');
+    successMessage.addEventListener('click', function () {
+      closeMessage(successMessage);
+    });
+
+    document.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === window.util.escKeycode) {
+        closeMessage(successMessage);
+        evt.preventDefault();
+      }
+    });
+  };
+
+  var showErrorMessage = function () {
+    var errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+    var errorMessageElement = errorMessageTemplate.cloneNode(true);
+
+    document.querySelector('main').insertAdjacentElement('afterbegin', errorMessageElement);
+
+    var errorMessage = document.querySelector('.error');
+    errorMessage.addEventListener('click', function () {
+      closeMessage(errorMessage);
+    });
+
+    errorMessage.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === window.util.escKeycode) {
+        closeMessage(errorMessage);
+        evt.preventDefault();
+      }
+    });
+  };
+
+  var successHandler = function () {
+    pageDisabledHandler();
+    showSuccessMessage();
+  };
+
+  var form = document.querySelector('.ad-form');
+  form.addEventListener('submit', function (evt) {
     evt.preventDefault();
+    window.backend.save(new FormData(form), successHandler, showErrorMessage);
   });
+
+  window.form = {
+    removePins: removePins,
+    removePopupCards: removePopupCards,
+    showErrorMessage: showErrorMessage,
+  };
 
 })();
